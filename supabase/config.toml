@@ -1,0 +1,16 @@
+# Supabase CLI の最小設定。`supabase start` でローカルスタックを起動して migrations / tests を検証できる。
+project_id = "cinemix"
+[api]
+port = 54321
+schemas = ["public", "storage"]
+[db]
+port = 54322
+major_version = 15
+[auth]
+site_url = "http://127.0.0.1:5173"
+additional_redirect_urls = ["https://127.0.0.1:5173", "http://127.0.0.1:4173"]
+enable_signup = true
+[auth.email]
+enable_confirmations = false
+[storage]
+file_size_limit = "25MiB"

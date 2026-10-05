@@ -1,0 +1,41 @@
+{
+  "name": "@cinemix/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:lan": "vite --host 0.0.0.0 --mode lan",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@cinemix/core": "workspace:*",
+    "@cinemix/platform": "workspace:*",
+    "@cinemix/render-web": "workspace:*",
+    "@cinemix/storage": "workspace:*",
+    "@supabase/supabase-js": "2.117.2",
+    "dexie": "4.4.6",
+    "fflate": "0.8.3",
+    "mediabunny": "1.61.1",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-router-dom": "7.18.4",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@fontsource/allura": "5.3.0",
+    "@fontsource/bodoni-moda": "5.3.0",
+    "@fontsource/caveat": "5.3.0",
+    "@fontsource/noto-sans-jp": "5.3.0",
+    "@fontsource/noto-serif-jp": "5.3.0",
+    "@playwright/test": "1.56.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "vite": "8.3.2",
+    "vite-plugin-pwa": "2.0.0"
+  }
+}

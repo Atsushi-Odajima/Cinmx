@@ -1,0 +1,31 @@
+{
+  "name": "cinemix-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CinemiX - iPhone Safari で使うテンプレート動画制作Webアプリ (試作)",
+  "packageManager": "pnpm@10.28.0",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @cinemix/web dev",
+    "dev:lan": "pnpm --filter @cinemix/web dev:lan",
+    "build": "pnpm -r --filter './packages/*' run build && pnpm --filter @cinemix/web build",
+    "preview": "pnpm --filter @cinemix/web preview",
+    "typecheck": "pnpm -r run typecheck",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "pnpm --filter @cinemix/web test:e2e",
+    "fonts:prepare": "node scripts/prepare-fonts.mjs",
+    "brand:build": "node scripts/build-brand.mjs",
+    "templates:build": "node scripts/build-template-previews.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.4",
+    "fake-indexeddb": "6.2.5",
+    "playwright-core": "1.56.1",
+    "typescript": "5.9.3",
+    "vitest": "5.0.3"
+  },
+  "type": "module"
+}

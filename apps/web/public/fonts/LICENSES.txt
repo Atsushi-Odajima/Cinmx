@@ -1,0 +1,24 @@
+CinemiX bundled fonts — license index
+
+All fonts below are licensed under the SIL Open Font License 1.1 (OFL-1.1).
+Files are copied unchanged from the fontsource npm packages (woff2 subsets).
+
+Noto Sans JP  (package @fontsource/noto-sans-jp@5.3.0, OFL-1.1)
+  source: https://fonts.google.com/noto/specimen/Noto+Sans+JP
+  license file: fonts/noto-sans-jp/LICENSE
+
+Noto Serif JP  (package @fontsource/noto-serif-jp@5.3.0, OFL-1.1)
+  source: https://fonts.google.com/noto/specimen/Noto+Serif+JP
+  license file: fonts/noto-serif-jp/LICENSE
+
+Caveat  (package @fontsource/caveat@5.3.0, OFL-1.1)
+  source: https://fonts.google.com/specimen/Caveat
+  license file: fonts/caveat/LICENSE
+
+Allura  (package @fontsource/allura@5.3.0, OFL-1.1)
+  source: https://fonts.google.com/specimen/Allura
+  license file: fonts/allura/LICENSE
+
+Bodoni Moda  (package @fontsource/bodoni-moda@5.3.0, OFL-1.1)
+  source: https://fonts.google.com/specimen/Bodoni+Moda
+  license file: fonts/bodoni-moda/LICENSE

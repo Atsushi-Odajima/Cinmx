@@ -1,0 +1,7 @@
+{
+  "id": "0b6f1d2e-5a3c-4c8e-9d1f-1a2b3c4d5e02",
+  "slug": "postcard",
+  "generatedAt": "2026-10-05T13:43:25.499Z",
+  "engine": "renderFrame (same as app) + ffmpeg libx264 (host encode only)",
+  "probe": "h264,720,1280,450\n15.000000,137188"
+}

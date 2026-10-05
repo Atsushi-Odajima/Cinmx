@@ -1,0 +1,21 @@
+:root {
+  --page: #f3f0e7;
+  --surface: #fffcf4;
+  --ink: #25382e;
+  --muted: #59665d;
+  --accent: #d7e583;
+  --line: #c8cdc2;
+  --selected: #e2e8d7;
+  --success: #315c41;
+  --warning: #805a14;
+  --error: #963e35;
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-6: 24px; --sp-8: 32px; --sp-12: 48px;
+  --gutter: 16px;
+  --radius-input: 8px; --radius-sheet: 16px; --radius-preview: 4px;
+  --shadow-sheet: 0 8px 32px rgba(37, 56, 46, 0.14);
+  --font-body: 'Noto Sans JP', system-ui, sans-serif;
+  --font-head-jp: 'Noto Serif JP', 'Noto Sans JP', serif;
+  --font-head-en: 'Bodoni Moda', 'Noto Serif JP', serif;
+  --control-h: 48px;
+}
+@media (min-width: 430px) { :root { --gutter: 24px; } }

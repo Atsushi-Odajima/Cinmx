@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320" width="1200" height="320" role="img" aria-label="CinemiX">
+  <!-- 横組みワードマーク。末尾の X は大文字。書体: Bodoni Moda（OFL）をローカル配信、SVG 単体では serif フォールバック。 -->
+  <rect width="1200" height="320" fill="#F3F0E7"/>
+  <g transform="translate(64 40) scale(0.47)">
+    <rect width="512" height="512" rx="96" fill="#25382E"/>
+    <rect x="236" y="104" width="172" height="304" rx="10" fill="#FFFCF4"/>
+    <rect x="256" y="124" width="132" height="200" rx="4" fill="#D7E583"/>
+    <rect x="256" y="340" width="76" height="12" rx="3" fill="#C8CDC2"/>
+    <path d="M 262 176 A 118 118 0 1 0 262 336" fill="none" stroke="#FFFCF4" stroke-width="48" stroke-linecap="round"/>
+  </g>
+  <text x="360" y="212" font-family="'Bodoni Moda', 'Noto Serif JP', Georgia, serif" font-size="176" font-weight="600" fill="#25382E" letter-spacing="-4">Cinemi<tspan font-weight="700">X</tspan></text>
+  <line x1="360" y1="252" x2="1136" y2="252" stroke="#C8CDC2" stroke-width="2"/>
+  <text x="360" y="292" font-family="'Noto Sans JP', system-ui, sans-serif" font-size="26" fill="#59665D">写真を選んで、見本のような動画に。</text>
+</svg>
