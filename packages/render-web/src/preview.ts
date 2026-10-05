@@ -1,5 +1,5 @@
 import type { Asset, Project, RenderPlan, AssetInfoLookup } from '@cinemix/core';
-import { buildRenderPlan, renderFrame, totalDurationMs, LIMITS } from '@cinemix/core';
+import { buildRenderPlan, renderFrame, totalDurationMs, LIMITS, fadeLengthMs } from '@cinemix/core';
 import { WebFrameResources, type BlobLoader } from './resources';
 import { getMeasureFactory } from './measure';
 import { decodeAudioBlob, getAudioContext, scheduleAudioPreview } from './audio';
@@ -45,6 +45,9 @@ export class PreviewPlayer {
     this.canvas.height = LIMITS.canvas.height;
     this.plan = buildRenderPlan(project, getMeasureFactory());
     this.assetInfo = makeAssetInfo(assets);
+    // 初期位置は最初の枠の入場（フェード）が終わった時刻。0 秒はフェードイン途中で無地に見えるため。
+    const first = [...project.templateSnapshot.slots].sort((a, b) => a.index - b.index)[0];
+    this.timeMs = first ? Math.min(fadeLengthMs(first.durationMs), Math.max(0, this.plan.durationMs - 1)) : 0;
     void this.reloadResources();
   }
 

@@ -46,8 +46,12 @@ export function EditScreen() {
         title="仕上げ"
         right={
           <>
-            <button type="button" className="btn btn--ghost btn--small" onClick={() => store.undo()} disabled={!canUndo} aria-label="元に戻す">元に戻す</button>
-            <button type="button" className="btn btn--ghost btn--small" onClick={() => store.redo()} disabled={!canRedo} aria-label="やり直し">やり直し</button>
+            <button type="button" className="btn btn--ghost btn--icon" onClick={() => store.undo()} disabled={!canUndo} aria-label="元に戻す" title="元に戻す">
+              <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M8 5 4 9l4 4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><path d="M4 9h8a5 5 0 0 1 0 10h-2" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
+            </button>
+            <button type="button" className="btn btn--ghost btn--icon" onClick={() => store.redo()} disabled={!canRedo} aria-label="やり直し" title="やり直し">
+              <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="m14 5 4 4-4 4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><path d="M18 9h-8a5 5 0 0 0 0 10h2" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
+            </button>
             <SaveStatus status={save} onRetry={() => store.retrySave()} />
           </>
         }
