@@ -17,7 +17,7 @@ export default defineConfig(({ mode }) => {
       react(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['brand/*.svg', 'brand/*.png'],
+        includeAssets: ['brand/*.svg', 'brand/pwa-icon-*.png', 'brand/apple-touch-icon.png'],
         manifest: {
           name: 'CinemiX',
           short_name: 'CinemiX',
@@ -36,7 +36,7 @@ export default defineConfig(({ mode }) => {
         },
         workbox: {
           // アプリシェルと同梱素材（表紙・サンプル）だけをキャッシュ。フォントは実行時に CacheFirst。
-          globPatterns: ['**/*.{js,css,html,svg,ico,json,webmanifest}', 'brand/*.png', 'templates/*.png', 'templates/*.json'],
+          globPatterns: ['**/*.{js,css,html,svg,ico,json,webmanifest}', 'brand/pwa-icon-*.png', 'brand/apple-touch-icon.png', 'brand/logo-mark.png', 'templates/*/cover.png', 'templates/*/meta.json'],
           globIgnores: ['fonts/**', 'samples/**', 'templates/*.mp4'],
           navigateFallback: '/index.html',
           navigateFallbackDenylist: [/^\/supabase/, /^\/api/],

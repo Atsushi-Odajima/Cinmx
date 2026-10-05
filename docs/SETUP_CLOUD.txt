@@ -1,0 +1,38 @@
+CinemiX — オンライン共有（B 段階）の接続手順
+作成日: 2026-10-05 / UTF-8
+状態: サーバー用ソース・SQL・RLS・Edge Functions・テストは実装済み。実サービス（Supabase プロジェクト）は本セッションでは作成していない（外部アカウント契約は勝手に行わない）。接続までは「オンライン共有は未接続」と表示される。
+
+■ 構成
+Supabase Auth（メール＋パスワード／マジックリンク）＋ Postgres（RLS）＋ Storage（private bucket "template-assets"）＋ Edge Functions
+・templates(id, owner_id, name, description, version, visibility, moderation_status, manifest, created_at, updated_at)
+・template_versions（投稿のバージョン履歴。既存の下書きはテンプレートスナップショットを保存するため作者更新の影響を受けない）
+・template_assets（Storage パス参照。cover/background/preview/licenses）
+・reports（通報）、blocks（投稿者ブロック）、profiles（role: user/admin。クライアントから role は書き換え不可）
+・RLS: 所有者だけ編集。他者は visibility=public かつ moderation_status=approved のみ取得。管理者は全件。
+・Storage: private。署名 URL（120 秒）は認可を確認する Edge Function "template-asset-url" 経由で発行。URL を知っているだけでは非公開データへアクセスできない。署名 URL は失効まで短時間の残存アクセスがある。
+・審査: Edge Function "moderate-template" → DB 関数 moderate_template（is_admin() をサーバー側で確認）。
+・公開から非公開へ変更してもダウンロード済みコピーは回収できない（UI と規約草稿に明記）。
+
+■ 手順（ユーザー自身の Supabase アカウントで）
+1. https://supabase.com で新規プロジェクトを作成（リージョンは日本に近いもの）。
+2. Supabase CLI をインストール（https://supabase.com/docs/guides/local-development）。
+   ローカル検証:  supabase start  →  supabase db reset（supabase/migrations/0001_init.sql を適用）→  supabase test db（supabase/tests/rls.test.sql, pgTAP）
+3. 本番へ適用:  supabase link --project-ref <ref>  →  supabase db push
+4. Edge Functions を配備:  supabase functions deploy template-asset-url  /  supabase functions deploy moderate-template
+   （関数は SUPABASE_URL / SUPABASE_ANON_KEY / SUPABASE_SERVICE_ROLE_KEY を実行環境から読む。service_role は Edge Function 内だけで使い、Web に埋め込まない）
+5. Auth: Email を有効化。本番ではメール確認を有効にし、Site URL と Redirect URL に配備先の HTTPS URL を登録（supabase/config.toml はローカル用）。
+6. 管理者の設定: SQL Editor で  update public.profiles set role = 'admin' where id = '<管理者の auth.users.id>';
+   （クライアントからは変更不可。trigger protect_profile_role で拒否）
+7. Web 側: .env（.env.example をコピー）に
+   VITE_SUPABASE_URL=https://<ref>.supabase.co
+   VITE_SUPABASE_PUBLISHABLE_KEY=<publishable または anon key>
+   を設定してビルド。service_role キーを入れた場合はアプリ側で拒否して未接続扱いにする。
+8. 動作確認（受入 B）: 2 アカウントで
+   a) A が非公開テンプレートを投稿 → B の一覧・直接 ID 指定で取得できない（RLS テストと同じ）
+   b) A が公開で投稿 → 審査中は B に見えない → 管理者が承認 → B の一覧に出て使用できる
+   c) B が通報 → 管理者画面に表示。A が非公開へ切替 → B の一覧から消える（取得済みコピーは残る）
+   d) 一般利用者が moderate_template を呼んでも 42501 で拒否
+   e) Storage の非公開ファイルへ直接 URL でアクセスできない（署名 URL のみ、120 秒で失効）
+
+■ 未検証
+上記 8 の実サーバー検証は未実施（アカウント未作成）。SQL の構文は PostgreSQL 15 を想定して記述したが、`supabase db reset` での適用確認も本セッションでは未実施（CLI・Docker が実行環境にない）。初回適用時にエラーが出た場合は migrations を修正すること。

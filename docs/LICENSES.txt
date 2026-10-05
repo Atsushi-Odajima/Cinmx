@@ -1,0 +1,30 @@
+CinemiX — 同梱素材・主要ライブラリのライセンス一覧
+作成日: 2026-10-05
+
+■ フォント（すべて SIL Open Font License 1.1。apps/web/public/fonts/<family>/LICENSE に原文同梱。fontsource npm パッケージ 5.3.0 から未改変の woff2 をコピー）
+Noto Sans JP — Google / Noto Project — https://fonts.google.com/noto/specimen/Noto+Sans+JP
+Noto Serif JP — Google / Noto Project — https://fonts.google.com/noto/specimen/Noto+Serif+JP
+Caveat — Pablo Impallari ほか — https://fonts.google.com/specimen/Caveat（欧文用。和文は Noto Sans JP へ文字単位フォールバック）
+Allura — TypeSETit — https://fonts.google.com/specimen/Allura（欧文用）
+Bodoni Moda — Indestructible Type — https://fonts.google.com/specimen/Bodoni+Moda（UI 見出し・ロゴ用）
+収録文字: fontsource のサブセット（Noto は Google Fonts の unicode-range 分割を踏襲）。絵文字は非対応（入力時に明示）。
+
+■ 同梱サンプル画像（apps/web/public/samples/*.jpg, background-*.jpg）
+CinemiX 自作の風景風図版（ImageMagick で生成した幾何図形・グラデーション）。人物なし。商用再配布可（CC0 相当として扱う）。
+
+■ 同梱試聴用 BGM（apps/web/public/samples/cinemix-sample-bgm.mp3）
+CinemiX 自作（scripts/make-sample-bgm.py で合成、約 20 秒、MP3 128kbps）。外部楽曲・楽曲カタログは使用していない。商用再配布可（CC0 相当として扱う）。
+
+■ テンプレート表紙・見本動画（apps/web/public/templates/*/cover.png, preview.mp4）
+上記サンプル素材を、アプリと同じ描画エンジン（renderFrame）で描画して生成。見本動画のエンコードのみホストの ffmpeg（libx264）。
+
+■ ブランド素材（apps/web/public/brand）
+自作。既存 Cinemix のロゴ・配色は参照していない。
+
+■ 主要ライブラリ
+mediabunny 1.61.1 — MPL-2.0 / @mediabunny/mp3-encoder 1.61.2 — MPL-2.0（AAC 不可の端末での代替。WASM は必要時のみ読み込み）
+react 19.3.0, react-dom 19.3.0 — MIT / react-router-dom 7.18.4 — MIT
+dexie 4.4.6 — Apache-2.0 / fflate 0.8.3 — MIT / zod 4.6.5 — MIT
+@supabase/supabase-js 2.117.2 — MIT
+vite 8.3.2 — MIT / vite-plugin-pwa 2.0.0 — MIT / vitest 5.0.3 — MIT / @playwright/test 1.56.1 — Apache-2.0 / typescript 5.9.3 — Apache-2.0
+正確なライセンス全文は node_modules 内の各パッケージを参照。

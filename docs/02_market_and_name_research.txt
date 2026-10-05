@@ -1,0 +1,51 @@
+CinemiX — 市場・名称調査メモ
+調査日: 2026-10-05（ユーザー提供の調査結果を転記。価格は確認時点の掲載例で現在価格を保証しない）
+本セッション（実装時）の補足: 実行環境の外部ネットワークは npm / PyPI 以外が遮断されていたため、下記 URL の再確認は行っていない。「事実」はユーザー提供資料の記載、「仮説」は本企画の仮定として分けて記す。
+
+■ カテゴリ
+素材差し替え型の短尺動画制作。
+
+■ 出発点（事実／定性）
+ユーザー本人の CapCut 操作体験と添付画面で、テンプレートへの到達が分かりにくいという不満を確認。これは 1 人の定性的な証言で、市場全体の不満割合ではない。
+
+■ 競合（事実: 掲載内容の転記。仮説: 弱点の推測）
+1) CapCut  https://apps.apple.com/jp/app/id1500855883
+   無料＋アプリ内購入。Standard 月 1,080 円、Pro 月 2,180 円等の掲載。動画編集、自動字幕、キーフレーム、PIP、背景除去など。
+   長所: 機能幅。弱点仮説: 完成見本だけを使いたい人に入口が多い。機能や料金が全利用者に同じと断定しない。
+2) iMovie  https://www.apple.com/jp/imovie/
+   無料。Magic Movie と Storyboard による自動編集・案内。長所: 無料の制作支援。
+   差別化仮説: テンプレート発見・共有・最前面文字の操作を一貫させる。現行利用者レビューによる不満は独立確認していない。
+3) InShot  https://apps.apple.com/jp/app/id997362197
+   無料＋アプリ内購入。月 800 円、年 3,000 円、ライフタイム 8,000 円掲載。カット、文字、音楽、PIP 等。
+   長所: 編集手段の幅と料金選択肢。弱点仮説: 目的の完成形まで手動判断が必要になり得る。
+4) VN  https://apps.apple.com/jp/app/id1343581380
+   無料＋アプリ内購入。公式説明に透かしなし、テンプレート、AutoCut、多層編集。個別購入価格は未確認。
+   → 無料・テンプレートも既に競合が提供している。『他にはテンプレートがない』と宣伝しない。
+
+■ 市場仮説
+完成見本 → 素材順 → 最小限の文字と音楽、という導線が、編集を覚えたいわけではない層の完成率を改善する。
+売上・継続・月額 500 円の支払意思は未検証。広告非表示だけで十分な契約率になると断定しない。
+
+■ 検証計画
+対象 5〜8 人に同じ素材で制作してもらい、説明なしの完成率、迷った操作、保存までの時間、見本との一致感を測る。
+広告や価格検証は機能試作後。架空の人気数・満足度を表示しない（本アプリの一覧に人気順位・満足度は出していない）。
+
+■ 名称（CinemiX はユーザー指定。候補の再選定はしない）
+類似名の存在（ユーザー提供の確認結果）:
+・CineMix（動画制作サイト） https://cinemixapp.com/
+・Cinemix（App Store・音楽関連） https://apps.apple.com/us/app/cinemix/id842027137
+・CineMix（Google Play） https://play.google.com/store/apps/details?id=com.cinemix.andapp
+・Cinemix（GitHub の別アプリ） https://github.com/marshudi/Cinemix
+判断: 大小文字の差だけで独自名と見なさない。開発上の表示名は指定通り維持。公開・販売前に名称混同リスクを再確認。商標未確認。ドメイン未取得。上記既存サービスのドメインを配備先として使わない。
+ロゴは自作ワードマーク（Bodoni Moda）と『C＋写真枠』マーク。既存 Cinemix のロゴ・配色は参照していない。
+
+■ 技術資料（調査時点の参照。無条件の対応保証ではない）
+https://capacitorjs.com/docs
+https://capacitorjs.com/docs/getting-started/environment-setup
+https://mediabunny.dev/guide/supported-formats-and-codecs
+https://ffmpegwasm.netlify.app/docs/faq/
+https://developer.apple.com/av-foundation/
+https://developer.apple.com/app-store/review/guidelines/
+https://support.google.com/admob/answer/7313578?hl=ja
+ブラウザのコーデック対応はライブラリが保証するものではない。本実装は API サポートを実行時に検査する（設定画面「能力診断」）。
+実装時に参照した一次情報: mediabunny@1.61.1 の型定義（node_modules 内 .d.ts）。mediabunny.dev は実行環境から到達できなかった。

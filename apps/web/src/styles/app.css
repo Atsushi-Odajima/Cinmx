@@ -31,13 +31,13 @@ details summary { min-height: 44px; display: flex; align-items: center; cursor: 
 .topnav a[aria-current='page'] { border-bottom-color: var(--ink); }
 
 /* ---- buttons ---- */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-2); min-height: var(--control-h); min-width: 44px; padding: 0 var(--sp-4); border: 1px solid var(--line); border-radius: var(--radius-input); background: var(--surface); color: var(--ink); font: inherit; font-size: 16px; font-weight: 500; text-decoration: none; cursor: pointer; line-height: 1.2; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-2); min-height: var(--control-h); min-width: 44px; padding: 0 var(--sp-4); border: 1px solid var(--line-strong); border-radius: var(--radius-input); background: var(--surface); color: var(--ink); font: inherit; font-size: 16px; font-weight: 500; text-decoration: none; cursor: pointer; line-height: 1.2; }
 .btn--primary { background: var(--ink); color: var(--surface); border-color: var(--ink); }
 .btn--ghost { background: transparent; border-color: transparent; }
 .btn--small { min-height: 40px; font-size: 14px; padding: 0 var(--sp-3); }
 .btn--icon { padding: 0; width: 48px; }
 .btn--block { width: 100%; }
-.btn--danger { color: var(--error); border-color: var(--line); }
+.btn--danger { color: var(--error); border-color: var(--line-strong); }
 .btn:disabled, .btn[aria-disabled='true'] { opacity: 0.55; cursor: not-allowed; }
 @media (hover: hover) and (pointer: fine) { .btn:not(:disabled):hover { background: var(--selected); } .btn--primary:not(:disabled):hover { background: #1b2a22; } }
 .btn:not(:disabled):active { transform: translateY(1px); }
@@ -98,7 +98,7 @@ details summary { min-height: 44px; display: flex; align-items: center; cursor: 
 
 /* ---- slots (S3) ---- */
 .slot-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-3); margin: var(--sp-3) 0; }
-.slot { position: relative; border: 1px solid var(--line); border-radius: var(--radius-input); background: var(--surface); overflow: hidden; }
+.slot { position: relative; border: 1px solid var(--line-strong); border-radius: var(--radius-input); background: var(--surface); overflow: hidden; }
 .slot--selected { outline: 2px solid var(--ink); }
 .slot--dragging { opacity: 0.6; }
 .slot__tap { display: block; width: 100%; aspect-ratio: 9 / 12; background: none; border: 0; padding: 0; cursor: pointer; position: relative; font: inherit; color: var(--ink); }
@@ -127,23 +127,23 @@ details summary { min-height: 44px; display: flex; align-items: center; cursor: 
 .field__row .field { flex: 1; margin: 0; }
 .field__unit { font-size: 14px; color: var(--muted); }
 .field--inline { display: flex; align-items: center; gap: var(--sp-2); }
-.input { width: 100%; min-height: var(--control-h); padding: var(--sp-2) var(--sp-3); border: 1px solid var(--line); border-radius: var(--radius-input); background: var(--surface); color: var(--ink); font: inherit; font-size: 16px; }
+.input { width: 100%; min-height: var(--control-h); padding: var(--sp-2) var(--sp-3); border: 1px solid var(--line-strong); border-radius: var(--radius-input); background: var(--surface); color: var(--ink); font: inherit; font-size: 16px; }
 .input--num { width: 100%; }
 .input--hex { width: 110px; font-family: ui-monospace, monospace; }
 textarea.input { resize: vertical; min-height: 64px; line-height: 1.5; }
 input[type='range'] { width: 100%; min-height: 44px; accent-color: var(--ink); }
-input[type='color'] { width: 48px; height: 48px; border: 1px solid var(--line); border-radius: var(--radius-input); padding: 2px; background: var(--surface); }
+input[type='color'] { width: 48px; height: 48px; border: 1px solid var(--line-strong); border-radius: var(--radius-input); padding: 2px; background: var(--surface); }
 .check, .radio { display: flex; align-items: center; gap: var(--sp-2); min-height: 44px; }
-.check input, .radio input { width: 22px; height: 22px; accent-color: var(--ink); }
+.check input, .radio input { width: 22px; height: 22px; accent-color: var(--ink); border-color: var(--line-strong); }
 .swatches { display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: center; }
-.swatch { width: 44px; height: 44px; border-radius: var(--radius-input); border: 1px solid var(--line); cursor: pointer; }
+.swatch { width: 44px; height: 44px; border-radius: var(--radius-input); border: 1px solid var(--line-strong); cursor: pointer; }
 .swatch.is-selected { outline: 2px solid var(--ink); outline-offset: 2px; }
-.seg { display: inline-flex; border: 1px solid var(--line); border-radius: var(--radius-input); overflow: hidden; }
+.seg { display: inline-flex; border: 1px solid var(--line-strong); border-radius: var(--radius-input); overflow: hidden; }
 .seg__btn { min-height: 44px; min-width: 64px; border: 0; background: var(--surface); color: var(--ink); font: inherit; font-size: 14px; cursor: pointer; }
 .seg__btn.is-selected { background: var(--ink); color: var(--surface); }
 .rangeband { position: relative; height: 10px; border-radius: 5px; background: var(--line); margin: var(--sp-2) 0; }
 .rangeband__fill { position: absolute; top: 0; bottom: 0; background: var(--ink); border-radius: 5px; }
-.basecard { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; width: 100%; padding: var(--sp-3) var(--sp-4); border: 1px solid var(--line); border-radius: var(--radius-input); background: var(--surface); color: var(--ink); font: inherit; text-align: left; cursor: pointer; min-height: 64px; }
+.basecard { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; width: 100%; padding: var(--sp-3) var(--sp-4); border: 1px solid var(--line-strong); border-radius: var(--radius-input); background: var(--surface); color: var(--ink); font: inherit; text-align: left; cursor: pointer; min-height: 64px; }
 
 /* ---- editor (S4) ---- */
 .editor { display: flex; flex-direction: column; gap: var(--sp-2); }
@@ -160,14 +160,14 @@ input[type='color'] { width: 48px; height: 48px; border: 1px solid var(--line); 
 .transport__time { min-width: 90px; font-size: 14px; }
 .transport__scrub { flex: 1; }
 .slotmarks { display: flex; gap: 2px; }
-.slotmark { min-height: 32px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: inherit; font-size: 13px; border-radius: 4px; cursor: pointer; padding: 0; }
+.slotmark { min-height: 32px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink); font: inherit; font-size: 13px; border-radius: 4px; cursor: pointer; padding: 0; }
 .slotmark.is-current { background: var(--selected); border-color: var(--ink); }
 .tabs { display: flex; border-bottom: 1px solid var(--line); }
 .tab { flex: 1; min-height: 44px; border: 0; background: none; font: inherit; font-size: 15px; font-weight: 500; color: var(--muted); border-bottom: 2px solid transparent; cursor: pointer; }
 .tab.is-selected { color: var(--ink); border-bottom-color: var(--ink); }
 .panel__head { display: flex; align-items: center; justify-content: space-between; margin: var(--sp-2) 0; }
 .textlist { list-style: none; padding: 0; margin: 0 0 var(--sp-2); display: flex; flex-direction: column; gap: var(--sp-1); }
-.textlist__item { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: var(--sp-2); min-height: 44px; padding: var(--sp-1) var(--sp-3); border: 1px solid var(--line); border-radius: var(--radius-input); background: var(--surface); color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+.textlist__item { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: var(--sp-2); min-height: 44px; padding: var(--sp-1) var(--sp-3); border: 1px solid var(--line-strong); border-radius: var(--radius-input); background: var(--surface); color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
 .textlist__item.is-selected { border: 2px solid var(--ink); background: var(--selected); }
 .textlist__value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .textform { border-top: 1px solid var(--line); padding-top: var(--sp-2); }

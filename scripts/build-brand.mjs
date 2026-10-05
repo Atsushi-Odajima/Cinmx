@@ -7,7 +7,12 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const web = join(root, 'apps', 'web');
 const brandDir = join(web, 'public', 'brand');
-const fontsCss = readFileSync(join(web, 'public', 'fonts', 'fonts.css'), 'utf8').replaceAll('url(/fonts/', `url(file://${join(web, 'public', 'fonts')}/`);
+// フォントも file:// では読めない場合があるため、使用する書体だけ data URI で埋め込む（latin/japanese の主要サブセット）
+import { readdirSync } from 'node:fs';
+const fontsDir = join(web, 'public', 'fonts');
+const rawCss = readFileSync(join(fontsDir, 'fonts.css'), 'utf8');
+const fontsCss = rawCss.replace(/url\(\/fonts\/([^)]+)\)/g, (_m, rel) => `url(data:font/woff2;base64,${readFileSync(join(fontsDir, rel)).toString('base64')})`);
+void readdirSync;
 mkdirSync(brandDir, { recursive: true });
 
 const browser = await chromium.launch({ headless: true });
@@ -30,10 +35,12 @@ await renderSvg('logo-mark.svg', 'logo-mark.png', { w: 256, h: 256 });
 await renderSvg('logo-horizontal.svg', 'logo-horizontal.png', { w: 1200, h: 320 });
 
 // ブランドボード（ポスター型）: 実装済み画面のスクリーンショットがあれば埋め込む
-const shots = ['templates', 'edit', 'export'].map((n) => join(root, 'docs', 'screenshots', `${n}-390.png`)).filter((p) => existsSync(p));
-const shotTags = shots.map((p) => `<img src="file://${p}" alt="">`).join('');
+// setContent ページからは file:// 画像が読めないため data URI で埋め込む
+const dataUri = (p) => `data:image/png;base64,${readFileSync(p).toString('base64')}`;
+const shots = ['templates', 'media', 'edit'].map((n) => join(root, 'docs', 'screenshots', `${n}-390.png`)).filter((p) => existsSync(p));
+const shotTags = shots.map((p) => `<img src="${dataUri(p)}" alt="">`).join('');
 const cover = join(web, 'public', 'templates', 'quiet-cut', 'cover.png');
-const coverTag = existsSync(cover) ? `<img class="cover" src="file://${cover}" alt="">` : `<div class="cover ph"></div>`;
+const coverTag = existsSync(cover) ? `<img class="cover" src="${dataUri(cover)}" alt="">` : `<div class="cover ph"></div>`;
 const board = `<!doctype html><html lang="ja"><head><meta charset="utf-8"><style>
 ${fontsCss}
 html,body{margin:0}
@@ -56,8 +63,8 @@ body{width:1600px;height:1000px;background:#F3F0E7;color:#25382E;font-family:'No
 .type .c{font-size:16px;line-height:1.6;margin-top:8px}
 .type .d{font-family:'Caveat',cursive;font-size:30px;margin-top:8px;color:#59665D}
 .type .e{font-size:13px;letter-spacing:0.01em;color:#59665D;margin-top:8px}
-.shots{position:absolute;left:72px;top:600px;display:flex;gap:16px}
-.shots img{height:360px;width:auto;border:1px solid #C8CDC2;border-radius:4px;background:#fff}
+.shots{position:absolute;left:72px;top:560px;display:flex;gap:16px}
+.shots img{height:340px;width:auto;border:1px solid #C8CDC2;border-radius:4px;background:#fff}
 .mark{position:absolute;right:72px;bottom:56px;width:96px;height:96px}
 .foot{position:absolute;left:76px;bottom:40px;font-size:12px;color:#59665D}
 </style></head><body>

@@ -1,0 +1,41 @@
+CinemiX — 状態（STATUS）
+最終更新: 2026-10-05 / UTF-8 / ブランチ: claude/cinemix-web
+
+■ できたこと（A: 外部アカウント不要のローカル編集・実動画出力・ローカルテンプレート制作）
+・packages/core: Zod スキーマ（NaN/Infinity 拒否、範囲・枠数・期間の整合）、整数 ms タイムライン、easing、短い動画の hold/fade、音声計画、cover/焦点/倍率、共通改行計算とクランプ、決定論的 renderFrame、3 テンプレート、プロジェクト操作、履歴 30。
+・packages/storage: Dexie（projects/assets/localTemplates/exports/quarantine/settings）、500ms デバウンス自動保存と容量不足の通知、破損 JSON の隔離、孤児素材の回収、.cinemix-template.zip と .cinemix-project.zip（パストラバーサル・重複・拡張子・圧縮爆弾・マジックバイト検査）。
+・packages/platform: MediaAdapter / RenderAdapter / ShareAdapter / TemplateRepository / AdService(NoOp・開発時シミュレート) / PurchaseService(NoOp) のインターフェースと Web 実装、広告判定規則、Supabase クライアントとテンプレートリポジトリ。
+・packages/render-web: フォント読み込み待ち、画像（回転適用・縮小デコード）、動画（Mediabunny 順次デコード／<video> シーク代替）、OfflineAudioContext による区間・音量・フェード、WebCodecs+Mediabunny の MP4 書き出し（バックプレッシャー、キャンセル、中断検出、Wake Lock）、MediaRecorder 実時間録画の代替、能力検査、プレビュー再生。
+・apps/web: S1〜S9 の画面、PWA（manifest/SW/アイコン）、デザイントークン、ドラッグ並べ替え、クロップ・トリムシート、文字のドラッグ／ピンチ、音楽、書き出し・共有、下書き・バックアップ・復元、テンプレート制作・パッケージ入出力、設定・診断、管理画面（B 接続時）。
+・supabase: migrations（RLS、バージョン履歴、審査 RPC、private bucket）、Edge Functions（署名 URL・審査）、pgTAP RLS テスト、.env.example、SETUP_CLOUD.txt。
+・テスト: vitest 54 件、Playwright 11 件（実 MP4 の ffprobe・フレーム・音声 RMS 検査を含む）。typecheck/build 通過。
+
+■ 未検証（正直な範囲）
+・iPhone 実機（Safari）での AC01/AC06: 本セッションでは実機がなく未実施。docs/README.txt 5 章の手順でユーザーの確認を依頼。
+・H.264/AAC そのもののエンコード: 実行環境の Chromium（Playwright 同梱）に H.264/AAC エンコーダが無いため、同じパイプラインを VP9+MP3 で検証した（利用者向け出力は H.264 固定。VP9 を MP4 に入れる経路は診断・テスト専用）。iPhone では WebCodecs の H.264（ハードウェア）を実行時検査して使う。
+・WebKit（Safari 系）での自動テスト: Playwright の WebKit 未導入。Chromium のみ。
+・PWA のホーム画面追加の挙動、Wake Lock の実機挙動、画面ロック中断からの復帰。
+・B の実サーバー（Supabase）での 2 アカウント検証、SQL の実適用（CLI/Docker が実行環境に無い）。
+・HEIC/HEVC/HDR 素材の実機デコード挙動（検査は実装済み。非対応時の案内まで）。
+
+■ 設定待ち
+・ルート 1（LAN HTTPS）: ユーザーの Windows で mkcert と .env（DEV_HTTPS_CERT/KEY）の設定。
+・ルート 2（公開 URL）: 配備先の指定。未指定のため公開していない（「公開しました」とは言わない）。
+・B: Supabase プロジェクトの作成と .env（VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY）。
+・C: Capacitor/iOS ビルド、AdMob、StoreKit（NATIVE_HANDOFF.txt）。
+
+■ 既知の制限・設計上の注意
+・window.__cinemix（テスト用フック）は本番ビルドにも含まれる（利用者データに触れない独立 DB を使用）。不要なら main.tsx の installHarness() を削除。
+・絵文字は非対応（入力時に明示）。筆記体は欧文用で和文は Noto Sans JP にフォールバック。
+・fonts.css は約 390KB（unicode-range の分割定義）。初回読み込み後は SW がキャッシュ。
+・素材の合計 150MB、テンプレートパッケージ 25MB、プロジェクトバックアップ 150MB。
+・同梱テンプレートの見本動画はエンジン描画＋ホスト ffmpeg エンコード（meta.json に明記）。
+
+■ 起動コマンド
+  pnpm install --frozen-lockfile
+  pnpm dev            # PC
+  pnpm dev:lan        # iPhone（同一 Wi-Fi・HTTPS。docs/README.txt 2 章）
+  pnpm typecheck && pnpm test && pnpm build && pnpm test:e2e
+
+■ iPhone で開く URL
+  公開 URL は無い。ルート 1: https://<WindowsのLAN-IP>:5173/（Windows 起動中・同一 Wi-Fi・mkcert の CA を iPhone で完全信頼）。

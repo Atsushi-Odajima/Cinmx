@@ -1,0 +1,53 @@
+CinemiX — iPhone ネイティブ化（Capacitor + Swift/AVFoundation）への引継書
+作成日: 2026-10-05 / UTF-8 / 今回はインターフェース・移行仕様のみ（iOS ビルドは実行していない）
+
+■ 原則
+・共通データ（JSON）は DOM・Swift 型に依存しない。packages/core が唯一の正。
+・大量のフレームや base64 を JS–Swift ブリッジで往復させない。ネイティブ移行では「素材ファイル参照＋プロジェクト JSON」を渡し、Swift 側でレンダリング。返すのは進捗と完成ファイル参照だけ。
+・バンドル ID はプレースホルダー（例: com.example.cinemix）。本番用は未確定。
+
+■ 共通 JSON（packages/core/src/schema）
+schemaVersion=1、日時 UTC ISO8601、ID は UUID。
+Template{id,version,name,description,baseLayoutId,aspectRatio('9:16'),canvasBackground(#RRGGBB),backgroundAssetId?,backgroundTransform{centerX,centerY,scale},slots[],frameStyle,requiredAssetCount}
+Slot{id,index,durationMs(1000..8000, 100 刻み),rect{x,y,w,h}(左上原点・0..1 比率),motionPreset('none'|'zoomSlow'),entryPreset('none'|'fadeIn'|'slideUpSmall'|'slideFromRight'),exitPreset('none'|'fadeOut')}
+Project{id,schemaVersion,title,templateSnapshot,slotBindings[],texts[],audio?,createdAt,updatedAt}
+SlotBinding{slotId,assetId,sourceInMs,crop{centerX,centerY,scale(1..3)},shortVideoPolicy('hold'|'fade')}
+Text{id,value(≤100 文字・≤4 行),fontId('noto-sans-jp'|'noto-serif-jp'|'caveat'|'allura'),color,fontSizeRatio(0.02..0.15, 動画幅比),lineHeight,align,centerX,centerY,startMs,endMs,zOrder,background?{color,opacity,paddingRatio},stroke?{color,widthRatio}}
+Audio{assetId,sourceInMs,sourceOutMs,volume(0..1),fadeOutMs(0|1000)}
+Asset{id,kind,mime,byteSize,width?,height?,durationMs?,localBlobKey,checksum}
+
+■ 時刻・座標・補間（packages/core/src/timeline, render/presets.ts）
+・総時間 D = Σ durationMs。枠 k は [startMs, endMs)。境界時刻は次の枠。t >= D は描画なし。
+・出力フレーム k の時刻 = k*1000/30 ms、フレーム数 = ceil(D*30/1000)。末尾フレームの duration を調整し D との誤差 1 フレーム以内（frameDurationSec）。
+・フェード長 = min(250ms, duration/4)。入退場も同じ長さ。移動距離はキャンバス比率（slideUpSmall: dy=12/1280、slideFromRight: dx=0.06）。
+・補間: linear(p)=p、easeInOutCubic(p)= p<0.5 ? 4p^3 : 1-(-2p+2)^3/2。zoomSlow は 1.00→1.05 を linear。入退場は easeInOutCubic。
+・短い動画: hold=最終フレーム保持、fade=再生可能区間の最後 300ms で α 1→0（区間が 300ms 未満なら半分）。枠時間は伸縮しない（resolveVideoFrame）。
+・文字の表示は [startMs,endMs)。描画順: 背景 → 該当素材枠（cover＋焦点＋倍率、枠でクリップ、枠中心基準で scale/dx/dy）→ 固定フレーム・番号 → 文字（zOrder 昇順）。
+・cover 計算: computeCoverSourceRect（coverScale=max(dstW/srcW,dstH/srcH)×crop.scale、中心クランプで空白なし）。
+・文字: px = fontSizeRatio×720。最大幅 0.9×720。改行は layoutText（明示改行→欧文は単語、和文は文字単位、簡易行頭禁則、長い欧文は文字分割）。行配列をプランに保持。バウンディングボックスはキャンバス内にクランプ（clampTextCenter）。ベースラインは行内 (linePx-fontPx)/2 + 0.8×fontPx。
+・音声: 選択区間 [a,b) を動画 0 秒から。使う長さ min(b-a, D)。短ければ以降無音。フェードは最後 min(1000ms, 使用長) を線形で 0。48kHz ステレオにリサンプル。
+
+■ 参照見本
+apps/web/public/templates/{quiet-cut,postcard,contact-strip}/preview.mp4（同エンジンで描画・libx264 エンコード）。ネイティブ実装はこれと先頭／切替／末尾フレームを比較して一致を確認する。
+
+■ Adapter（packages/platform/src/adapters.ts）
+MediaAdapter: import(files, kinds) / probe / read / release — iOS: PHPicker + AVAssetImageGenerator/AVAsset で probe（回転は preferredTransform を適用）。
+RenderAdapter: capabilities() / export(project, assets, onProgress, signal, options) — iOS: AVAssetWriter（H.264 720×1280 30fps 3Mbps、AAC 128kbps 48kHz）。フレームは CoreGraphics/Metal で renderFrame と同じ順序・同じ式で描画。進捗は実フレーム数。
+ShareAdapter: canShare / shareFile / download — iOS: UIActivityViewController（写真アプリへ保存）。
+TemplateRepository: list / get / saveLocal / publish / setVisibility — Supabase は共通（supabase-swift または既存 Web 層を WebView で流用）。
+AdService: prepare / show / close / onFailure — AdMob（上部バナー、書き出し待ち、日 3 回目の全画面）。同じ回に重複表示しない、同一ジョブ再試行で再表示しない、失敗で動画作成を止めない（decideExportAd の規則）。
+PurchaseService: hasAdFree / purchaseAdFree — StoreKit 2 自動更新サブスクリプション月額 500 円（商品 ID 未確定）。契約者は全枠非表示。
+
+■ Web 固有の制限（ネイティブで置換）
+・WebCodecs の AAC 対応に依存（AAC 不可の端末は MP3）。ネイティブは AVAssetWriter で常に AAC。
+・画面ロック・バックグラウンドで書き出し中断 → ネイティブは Background Task で継続可能性あり（要検証）。
+・IndexedDB の容量・Safari のデータ削除リスク → ネイティブは Documents/Application Support に保存。
+・フォント: ネイティブは同じ OFL フォントをバンドルし、改行計算を CoreText で再実装。表示と出力で同じ計算を使う。
+・HEIC/HEVC: ネイティブは標準でデコード可。SDR への変換ポリシーは Web と同じ説明を出す。
+
+■ 残タスク（C 段階）
+1. Capacitor プロジェクト作成（apps/ios）。Web 版をそのまま WebView で動かすのが第一段階。
+2. RenderAdapter の Swift 実装（AVFoundation）と見本動画との一致テスト。
+3. AdMob SDK と StoreKit 2（月額 500 円）。日次回数の日付境界・端末間同期・広告事業者規約の確定。
+4. 投稿管理（審査・通報・ブロック）の運用設計と管理者ツール。
+5. App Store 提出要件（プライバシー表示、利用規約、年齢区分）。

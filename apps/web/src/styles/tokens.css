@@ -4,7 +4,8 @@
   --ink: #25382e;
   --muted: #59665d;
   --accent: #d7e583;
-  --line: #c8cdc2;
+  --line: #c8cdc2; /* 罫線・区切り（装飾） */
+  --line-strong: #768078; /* 入力・ボタンの境界（page/surface に対し 3:1 以上、実測値は docs/03） */
   --selected: #e2e8d7;
   --success: #315c41;
   --warning: #805a14;
