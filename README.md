@@ -16,3 +16,12 @@ pnpm typecheck; pnpm test; pnpm build; pnpm test:e2e
 ```
 
 構成: `packages/core`（スキーマ・タイムライン・描画）、`packages/storage`（IndexedDB・ZIP）、`packages/platform`（Adapter 境界・Supabase）、`packages/render-web`（デコード・MP4 書き出し）、`apps/web`（React PWA）、`supabase/`（B 段階のサーバー構成）、`docs/`。
+
+## 実装範囲と確認先
+
+- iPhone実機、Safari / WebKit、H.264・AACの実機エンコードは既存の試験記録でも未検証です。書き出し可否はブラウザの能力に依存します。
+- Supabaseによるクラウド機能は設定と実サーバー検証が別途必要です。Capacitor・AdMob・StoreKitは移行仕様の段階です。
+
+実装箇所：[apps/web/src/screens](./apps/web/src/screens) / [packages/core/src](./packages/core/src) / [packages/render-web/src](./packages/render-web/src) / [packages/storage/src](./packages/storage/src)。
+現在の残項目：[docs/STATUS.txt](./docs/STATUS.txt)。
+
